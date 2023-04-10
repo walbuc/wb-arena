@@ -9,7 +9,10 @@ import {NonceProvider} from './utils/nonce-provider'
 const ABORT_DELAY = 5000
 type DocRequestArgs = Parameters<HandleDocumentRequestFunction>
 
-export default async function handleRequest(...args: DocRequestArgs) {
+// because of the load context patch
+// seek a workaround for prod.
+type DocRequestArgsT = [...DocRequestArgs, any]
+export default async function handleRequest(...args: DocRequestArgsT) {
   const [
     request,
     responseStatusCode,
