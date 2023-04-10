@@ -22,16 +22,16 @@ export default async function handleRequest(...args: DocRequestArgs) {
     responseHeaders.set('Cache-Control', 'no-store')
   }
   // when cloudinary service is set up
-  // responseHeaders.append(
-  //   "Link",
-  //   '<https://res.cloudinary.com>; rel="preconnect"'
-  // );
+  responseHeaders.append(
+    'Link',
+    '<https://res.cloudinary.com>; rel="preconnect"',
+  )
 
   const callbackName = isbot(request.headers.get('user-agent'))
     ? 'onAllReady'
     : 'onShellReady'
 
-  const nonce = loadContext.cspNonce ? String(loadContext.cspNonce) : undefined
+  const nonce = loadContext?.cspNonce ? String(loadContext.cspNonce) : undefined
 
   return new Promise((resolve, reject) => {
     let didError = false
