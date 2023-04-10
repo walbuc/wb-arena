@@ -1,0 +1,80 @@
+---
+title: Suspense
+description: some description here
+---
+
+## Background
+
+NOTE: In the latest version of React, "Concurrent Mode" is not a thing. Instead
+there are "Concurrent Features" that your components opt-into via the concurrent
+APIs which you will learn about in this workshop. Learn more about some of the
+changes in the notice at the top of this docs page:
+https://17.reactjs.org/docs/concurrent-mode-reference.html
+
+In today's React ecosystem, there are three ways to load data into your app:
+
+1. Render-Fetch Waterfalls (aka "fetch as you render"): This refers to fetching
+   data inside of components, from the browser, after a JavaScript bundle has
+   been loaded and rendered. We call it a "waterfall" because after a bundle
+   loads, renders, and kicks off a data fetch, it renders child components that
+   do the same. Load modules → render (spinner) → fetch → render children (more
+   spinners) → fetch in children → etc. Each time you render and show a spinner
+   is another step in the waterfall.
+
+If you haven't already, take a scroll down our home page to see how this method
+of loading data affects the UI. It creates artificial data and module
+hierarchies by coupling those resources to UI hierarchy. You don't know what to
+fetch until you render, and you can't render until you fetch the parent's data!
+This tends to create "jank" in the UI and cause cumulative layout shift (CLS) as
+child views pop into the page after parent views have already rendered.
+
+2. Fetch, Then Render: Before rendering a page, fetch all of your data and then
+   render the entire page at once. This is the default behavior in Remix. This
+   is also how most websites have worked for decades. Because of nested routes,
+   Remix knows all of the dependencies for a page (JS modules, data, even CSS)
+   just from the URL so it can run all queries and load resources in parallel.
+   It can even prefetch those resources when you think the user is going to
+   visit a page. As you'll see in this post, this has a positive impact on the
+   initial page load and subsequent navigation.
+
+3. Render As You Fetch: Like fetch, then render, you kick off all loading in
+   parallel but you don't wait for all of the resources. Instead, you render
+   whichever pieces are ready when they're ready. This is not possible unless
+   you're already able to fetch, then render. It's an optimization to get
+   something useful (not an empty div please!) to the user ASAP.
+
+Almost every app in the React ecosystem today uses render-fetch waterfalls. This
+is the default behavior for any data fetching that runs inside a useEffect()
+hook, including libraries like react-query, useSWR, Apollo Client, and many
+others.
+
+Out of the box, React Server Components are also a render-fetch waterfall.
+Because fetching is done inside of components, your app doesn't know what to
+fetch until a component renders.
+
+The problem is that out of the three, the _render-fetch waterfall provides the
+worst UX_. Let's run some tests to see why.
+
+### Render as you fetch
+
+The idea here is: get the data **as soon as you have the information you need**
+for the data. This sounds obvious, but if you think about it, how often do you
+have a component that requests data once it's been mounted. There's a few
+milliseconds between the time you click "go" and the time that component is
+mounted... Unless that component's code is **lazy-loaded**. In which case,
+there's a lot more time involved (first load the code, then parse the code, then
+run the code, then render the component, and finally make the request) and your
+users are hanging around waiting while they could be making requests for the
+data they need.
+
+"Render as you fetch" is intended to fix this problem because you can make the
+request for the code and the data at the same time.
+
+### Suspense Image
+
+Loading images is tricky business because you're handing the asynchronous state
+over to the browser. It manages the loading, error, and success states for you.
+But what if you have an experience that doesn't look any good until the image is
+actually loaded? Or what if you want to render a fallback in the image's place
+while it's loading (you want to provide your own loading UI)? In that case,
+you're kinda out of luck, because the browser gives us no such API.

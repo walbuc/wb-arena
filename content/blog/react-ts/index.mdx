@@ -1,0 +1,208 @@
+---
+title: React & Ts
+date: 2023-01-03
+description: Useful resources for Ts and React
+categories:
+  - state
+meta:
+  keywords:
+    - typescript
+    - react
+bannerCloudinaryId: samples/cloudinary-group.jpg
+---
+
+### Working with Ts
+
+- https://fem-react-typescript.vercel.app/
+
+### Benefits:
+
+Ts is javascript plus a typed system.
+
+- Type safety & Reliability
+- Autocomplete
+- It can help use with static analysis in our code.
+- Provides type safety to catch bugs during development.
+- Intellisense provides autocompletion. [ It serves as documentation for the
+  code. Specially third party libraries.
+- Saves to expose only parts of your code and provide info on how it should be
+  used.
+- Analyses your code and besides autocompletion gives you more information.
+- Example 1: if your check for a value of type A | undefined and return. After
+  that line Ts garantee you that will exist a value of type A so you dont have
+  to do that extra check (value?.property).
+- Example 2: In if else or switch statements Ts will show you the types left
+  until type never.
+
+### Resources
+
+- [useReducer type safe with Switch component](https://codesandbox.io/s/bold-edison-rw66op?file=/src/App.tsx:352-363)
+
+```jsx
+type ReducerState = ReturnType<typeof reducer>
+```
+
+### Ts template literals as type definitions 🤯:
+
+```ts
+type HexColor = `#${string}`
+type RGBColor = `rgb(${number}${number}${number})`
+```
+
+### For action types
+
+We have all types made on the fly 🚀
+
+```ts
+type ColorFormats = 'rgb' | 'hex' | 'hsl' | 'hsv'
+type ActionTypes = `update-${ColorFormats}-color`
+```
+
+### Useful utility:
+
+When returning json data from api.
+
+```ts
+type HexColor = `#${string}`
+const isHexColor = (s: string): s is HexColor => s.startsWith('x')
+```
+
+### Dinamically derive the type from the value
+
+When you have a value with type inference you can derive the type with type of
+or copy paste what typescript inferenced. You can pull types out of values.
+
+```ts
+type ItemsState = typeof value value
+```
+
+```ts
+const status = ['idle', 'loading', 'success', 'error']
+type Statuses = (typeof status)[]
+```
+
+Choose your own adventure with Ts
+
+### Utilities Types
+
+- Type _Partial_ Takes all the keys in an object and makes them optional.
+  Partial match, useful for updating.
+- Omit do not allow key in value. Omit it.
+
+```ts
+// Utility
+// Omit<Partial<T>, key>
+
+// Custom type
+type Item = {
+  id: string
+  name: string
+  description: string
+}
+type PartialItem = Partial<Item>
+type PartialItemWithoutId = Omit<Partial<Item>, 'id'>
+```
+
+### Some usefuel utility types for React
+
+- [Utility Types info 🔨](https://fem-react-typescript.vercel.app/Utility%20types.md)
+
+### Generics aka Reusability
+
+Try to find a tradeoff between getting fancy and making less reusable types. If
+you are a maintainer of a library. This is the way 🎖. If you are a consumer
+maybe it doesnt worth the effort for typing a few action.
+
+Everything in CS is about tradeoffs.
+
+- [Generics info](https://fem-react-typescript.vercel.app/Generics.md)
+
+```ts
+type User = {
+  first: string
+  second: string
+  age: string
+}
+
+type ActionTypes = `update-${keyof User}`
+
+type Actions<T, K extends keyof T & string> = {
+  type: `update-${K}`
+  payload: T[k]
+}
+
+type UpdateNameAction = Actions<User, 'first'>
+```
+
+### Use With Arrow Functions
+
+You need a weird comma if JSX is enabled otherwise the compile gets confused as
+to whether or not you're writing the opening tag for JSX or a generic.
+
+```ts
+const createNode = <T>(value: T): Link<T> => ({value})
+
+const addNext = <T>(node: Link<T>, value: T): Link<T> => {
+  node.next = createNode(value)
+  return node
+}
+
+const createNodeAndNext = <T>(first: T, second: T) => {
+  const firstNode = createNode(first)
+  firstNode.next = createNode(second)
+  return firstNode
+}
+
+const createNodeAndNextTapped = <T>(first: T, second: T): Link<T> =>
+  tap(createNode(first), node => addNext(node, second))
+
+const node = createNode(4)
+const nextNode = addNext(node, 5)
+const twoNodes = createNodeAndNextTapped(1, 2)
+const twoMoreNodes = createNodeAndNext(4, 5)
+```
+
+Generics for context solution
+
+### Context vs Redux
+
+[Context vs Redux - _Mark Ericsson_ mantainer](https://blog.isquaredsoftware.com/2021/01/context-redux-differences/)
+
+### Context Reducer value solution
+
+If use context does not throw error, Ts is goint to always garantee that we have
+a value for that context. So, at the time of the return value on useContext,
+_ctx_ can be only of one type _< T, >_
+
+Example of closure.
+
+```ts
+export const createContext = <T extends {}>() => {
+  const Context = React.createContext<T | undefined>(undefined)
+
+  const useContext = () => {
+    const ctx = React.useContext(Context)
+
+    if (ctx === undefined) {
+      throw new Error('useContext must be inside a Provider with a value.')
+    }
+
+    return ctx
+  }
+
+  return [useContext, Context.Provider] as const
+}
+```
+
+When creating a type with all the props and you want to add your custom ones
+
+```ts
+type LabelInputProps = ComponentsPropsWithoutRef<'input'> & {
+  label: string
+  id: string
+}
+```
+
+More Advanced Patterns:
+
+[Typescript Challenges](https://ghaiklor.github.io/type-challenges-solutions/en/)

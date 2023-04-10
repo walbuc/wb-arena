@@ -1,0 +1,85 @@
+---
+title: Code splitting
+description:
+  Code splitting feature in bundlers like webpack can help you boost your app
+  performance.
+---
+
+### Background
+
+Code splitting acts on the principle that loading less code will speed up your
+app. Say for example that we're building a complex dashboard application that
+includes the venerable d3 library for graphing data. Your users start
+complaining because it takes too long to load the login screen.
+
+Webpack built in code splitting with dynamic import.
+
+```javascript
+import('/some-module.js').then(
+  module => {
+    // do stuff with the module's exports
+  },
+  error => {
+    // there was some error loading the module...
+  },
+)
+```
+
+### Eager Loading
+
+After the first time it will be cached in wepack module cache.
+
+```jsx
+
+const loadGlobe = () => import('../globe')
+const Globe = React.lazy(loadGlobe)
+
+function App() {
+  ...
+    >
+      <label
+        style={{marginBottom: '1rem'}}
+        onMouseEnter={loadGlobe}
+        onFocus={loadGlobe}
+      >
+    ...
+```
+
+### React Example
+
+With prefetch / preload
+
+```jsx
+const Prefetched = React.lazy(() =>
+  import(
+    /* webpackPrefetch: true */
+    /* webpackChunkName: "prefetched" */
+    './prefetched'
+  ),
+)
+const Preloaded = React.lazy(() =>
+  import(
+    /* webpackPreload: true */
+    /* webpackChunkName: "preload" */
+    './preloaded'
+  ),
+)
+
+function Main() {
+  const [show, setShow] = React.useState(false)
+  return (
+    <React.Suspense fallback="...">
+      <button onClick={() => setShow(true)}>Show</button>
+      {show ? (
+        <div>
+          <DepsIncluded />
+          <One />
+          <Two />
+          <Prefetched />
+          <Preloaded />
+        </div>
+      ) : null}
+    </React.Suspense>
+  )
+}
+```

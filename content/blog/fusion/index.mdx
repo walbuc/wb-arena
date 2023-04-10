@@ -1,0 +1,25 @@
+---
+title: Fusion ⚡️
+description: Using fusion technique
+---
+
+Fusion is a technique of combining pure functions — taking advantage of
+composition and removing the intermediary copies of data on each layer.
+
+### Fusion Example
+
+- This utility function is often available on various functional libraries (i.e
+  ramdajs) Lodash
+- `pipe` is the opposite of `compose` left to right instead of rifht to left
+
+```js
+const data = [ 1, 2, 3, 4, 5, ];
+const pipe = (...fns) => initialValue => fns.reduce((result, fn) =>
+fn(result), initialValue);
+
+const add = (x) => x + 1;
+const multiplyBy2 = (x) => x \* 2;
+
+const res = data .map( pipe(add, multiplyBy2) )
+ [ 4, 6, 8, 10, 12 ]
+```

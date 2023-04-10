@@ -1,0 +1,18 @@
+---
+title: REmIx Run Testing
+description: useful tips for testing remix run applications.
+---
+
+Write tests, not too many. Mostly integrations. Try to mock as little as
+possible.
+
+### Recomnendations for Remix testing
+
+- Unit tests loaders and action (see
+  https://sergiodxa.com/articles/test-remix-loaders-and-actions)
+- Test with RTL any component not depending on Remix hooks or components (they
+  need a context that you don’t have access to work)
+- Use Cypress to do E2E tests to test whole routes
+- Also check #372
+
+[Github Discussion about remix testing strategy](https://github.com/remix-run/remix/discussions/2481)

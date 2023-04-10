@@ -1,0 +1,159 @@
+---
+title: Hooks & Custom Hooks 🪝
+date: 2023-01-03
+description: Tips for custom hooks
+categories:
+  - state
+meta:
+  keywords:
+    - typescript
+    - react
+bannerCloudinaryId: arena/hook-flow.png
+---
+
+### useAsync Custom Hook
+
+Custom Hook that will handle promises with same satate as useQuery but without
+caching.
+
+```tsx
+import * as React from 'react'
+
+function useSafeDispatch(dispatch) {
+  const mounted = React.useRef(false)
+  React.useLayoutEffect(() => {
+    mounted.current = true
+    return () => (mounted.current = false)
+  }, [])
+  return React.useCallback(
+    (...args) => (mounted.current ? dispatch(...args) : void 0),
+    [dispatch],
+  )
+}
+
+// Example usage:
+// const {data, error, status, run} = useAsync()
+// React.useEffect(() => {
+//   run(fetchRequest(name))
+// }, [run, name])
+
+const defaultInitialState = {status: 'idle', data: null, error: null}
+function useAsync(initialState) {
+  const initialStateRef = React.useRef({
+    ...defaultInitialState,
+    ...initialState,
+  })
+  const [{status, data, error}, setState] = React.useReducer(
+    (s, a) => ({...s, ...a}),
+    initialStateRef.current,
+  )
+
+  const safeSetState = useSafeDispatch(setState)
+
+  const setData = React.useCallback(
+    data => safeSetState({data, status: 'resolved'}),
+    [safeSetState],
+  )
+  const setError = React.useCallback(
+    error => safeSetState({error, status: 'rejected'}),
+    [safeSetState],
+  )
+  const reset = React.useCallback(
+    () => safeSetState(initialStateRef.current),
+    [safeSetState],
+  )
+
+  const run = React.useCallback(
+    promise => {
+      if (!promise || !promise.then) {
+        throw new Error(
+          `The argument passed to useAsync().run must be a promise. Maybe a function that's passed isn't returning anything?`,
+        )
+      }
+      safeSetState({status: 'pending'})
+      return promise.then(
+        data => {
+          setData(data)
+          return data
+        },
+        error => {
+          setError(error)
+          return Promise.reject(error)
+        },
+      )
+    },
+    [safeSetState, setData, setError],
+  )
+
+  return {
+    // using the same names that react-query uses for convenience
+    isIdle: status === 'idle',
+    isLoading: status === 'pending',
+    isError: status === 'rejected',
+    isSuccess: status === 'resolved',
+
+    setData,
+    setError,
+    error,
+    status,
+    data,
+    run,
+    reset,
+  }
+}
+
+export {useAsync}
+```
+
+### useMedia Custom Hook
+
+Custom Hook example of using useDebugvalue. Useful to add _Labels_ to custom
+hooks. It is meant to be used only on Hooks not components. It accepts a
+function as second argunment that could be necessary when running expensive
+calculations. So this function wont block the thread.
+
+```tsx
+// useDebugValue: useMedia
+import * as React from 'react'
+
+function useMedia(query, initialState = false) {
+  const [state, setState] = React.useState(initialState)
+  React.useDebugValue(`\`${query}\` => ${state}`)
+
+  React.useEffect(() => {
+    let mounted = true
+    const mql = window.matchMedia(query)
+    function onChange() {
+      if (!mounted) {
+        return
+      }
+      setState(Boolean(mql.matches))
+    }
+
+    mql.addListener(onChange)
+    setState(mql.matches)
+
+    return () => {
+      mounted = false
+      mql.removeListener(onChange)
+    }
+  }, [query])
+
+  return state
+}
+
+function Box() {
+  const isBig = useMedia('(min-width: 1000px)')
+  const isMedium = useMedia('(max-width: 999px) and (min-width: 700px)')
+  const isSmall = useMedia('(max-width: 699px)')
+  const color = isBig ? 'green' : isMedium ? 'yellow' : isSmall ? 'red' : null
+
+  return <div style={{width: 200, height: 200, backgroundColor: color}} />
+}
+
+function App() {
+  return <Box />
+}
+
+export default App
+```

@@ -1,0 +1,92 @@
+---
+title: State Machines 🤖 & Animations
+date: 2023-01-07
+description: Finite State Machies and animations with data states
+categories:
+  - state
+meta:
+  keywords:
+    - state
+    - react
+    - animations
+---
+
+### Working with Layout animations
+
+- The FLIP technique
+  1. First Element getBoundingClientRect
+  2. Last Element getBoundingClientRect
+  3. Invert with transform
+  4. Play none
+
+The flip technique created by google is a preformance strategy usde to implement
+a complex animation when we need to change between different layouts that
+requires animating properties like with, height, border etc which will trigger
+dom layout rendering. This is something we try to avoid and always favor
+opacity, trnasform properties.
+
+The Flip technique utterly will apply a transform: none animation.
+
+### Resources
+
+- [How FLIP Works](https://codepen.io/davidkpiano/pen/EbwrQQ)
+- [FLIP Transition with CSS Variables](https://codepen.io/team/keyframers/pen/MWaoyNQ)
+- [FLIP Between States](https://codepen.io/team/keyframers/pen/xxVOLeM)
+
+<callout-success class="aside">Animations and data states are a great way to
+compose...</callout-success>
+
+Using data states attributes can be useful when interplayed with css selectors
+to trigger animations and add/remove/udpate styles and state transitions.
+
+### Code Sandboxes
+
+- [Form validation using State Machine xstate & Yup](https://codesandbox.io/s/form-w-xstate-yup-poc-forked-w0yks9)
+- [Password form example using state machine & animations](https://codesandbox.io/s/state-machine-animation-react-911lbc)
+
+<callout-info class="aside">requestFrameAnimation is useful when reading dom
+updates</callout-info>
+
+- [Layout animation with Flip technique](https://codesandbox.io/s/flip-layout-animation-vbbwuq)
+
+Abstracting the logic:
+
+```js
+function flip(fn, firstEls, lastEls = firstEls) {
+  // FIRST
+  const firstRects = firstEls.map(el => el.getBoundingClientRect())
+
+  fn()
+
+  requestAnimationFrame(() => {
+    // LAST
+    const lastRects = lastEls.map(el => el.getBoundingClientRect())
+
+    // INVERT
+    lastRects.forEach((lastRect, i) => {
+      const firstRect = firstRects[i]
+      const lastEl = lastEls[i]
+
+      if (!firstRect) {
+        return
+      }
+
+      const dx = firstRect.x - lastRect.x
+      const dy = firstRect.y - lastRect.y
+      const dw = firstRect.width / lastRect.width
+      const dh = firstRect.height / lastRect.height
+
+      lastEl.style.setProperty('--dx', dx)
+      lastEl.style.setProperty('--dy', dy)
+      lastEl.style.setProperty('--dw', dw)
+      lastEl.style.setProperty('--dh', dh)
+      lastEl.dataset.flip = 'invert'
+
+      requestAnimationFrame(() => {
+        // PLAY
+        lastEl.dataset.flip = 'play'
+      })
+    })
+  })
+}
+```

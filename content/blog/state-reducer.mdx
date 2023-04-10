@@ -1,0 +1,53 @@
+---
+title: State Reducer Pattern 🌀
+date: 2022-03-04
+description: Invertion of Control
+categories:
+  - state
+meta:
+  keywords:
+    - state
+    - IOC
+    - usereducer
+---
+
+### Background
+
+**One liner:** The State Reducer Pattern inverts control over the state
+management of your hook and/or component to the developer using it so they can
+control the state changes that happen when dispatching events.
+
+During the life of a reusable component which is used in many different
+contexts, feature requests are made over and over again to handle different
+cases and cater to different scenarios.
+
+We could definitely add props to our component and add logic in our reducer for
+how to handle these different cases, but there's a never ending list of logical
+customizations that people could want out of our custom hook and we don't want
+to have to code for every one of those cases.
+
+📜 Read more about this pattern in:
+[The State Reducer Pattern with React Hooks](https://kentcdodds.com/blog/the-state-reducer-pattern-with-react-hooks)
+
+**Real World Projects that use this pattern:**
+
+- [Downshift - combobox state wrapper](https://github.com/downshift-js/downshift)
+
+### Example
+
+We want to prevent the toggle from updating the toggle state after it's been
+clicked 4 times in a row before resetting. We could easily add that logic to our
+reducer, but instead we're going to apply a computer science pattern called
+"Inversion of Control" where we effectively say: "Here you go! You have complete
+control over how this thing works. It's now your responsibility."
+
+> As an aside, before React Hooks were a thing, this was pretty tricky to
+> implement and resulted in pretty weird code, but with useReducer, this is WAY
+> better.
+
+The goal is to enable people to provide a custom `reducer` so they can have
+complete control over how state updates happen in our component.
+
+### Code Sandbox:
+
+[State Reducer Toggle Example](https://codesandbox.io/s/bold-edison-rw66op?file=/src/App.tsx)
