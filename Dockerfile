@@ -5,7 +5,12 @@ FROM node:16-bullseye-slim as base
 ENV NODE_ENV production
 
 # Install openssl for Prisma
-RUN apt-get update && apt-get install -y openssl sqlite3
+
+# install openssl and sqlite3 for prisma
+# ca-certificates and fuse for litefs
+# procps for "tops" command to see which processes are hogging memory (it's node)
+# python & make for node-gyp
+RUN apt-get update && apt-get install -y fuse openssl sqlite3 ca-certificates procps python3 make g++
 
 # Install all node_modules, including dev dependencies
 FROM base as deps
