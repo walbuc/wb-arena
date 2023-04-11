@@ -3,16 +3,10 @@ kill_signal = "SIGINT"
 kill_timeout = 5
 processes = [ ]
 
-[mounts]
-source = "data"
-destination = "/data"
-
 [experimental]
   enable_consul = true
   allowed_public_ports = []
   auto_rollback = true
-  cmd = "start.sh"
-  entrypoint = "sh"
 
 
 [[services]]
@@ -50,3 +44,8 @@ destination = "/data"
     timeout = 5000
     tls_skip_verify = false
     [services.http_checks.headers]
+
+  
+[mounts]
+  source = "litefs"
+  destination = "/var/lib/litefs"
