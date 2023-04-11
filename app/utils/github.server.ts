@@ -139,7 +139,7 @@ async function downloadFileBySha(sha: string) {
 async function downloadFile(path: string) {
   const {data} = await octokit.repos.getContent({
     owner: 'walbuc',
-    repo: 'blog',
+    repo: 'wb-arena',
     path,
     ref,
   })
@@ -163,7 +163,7 @@ async function downloadFile(path: string) {
 async function downloadDirList(path: string) {
   const resp = await octokit.repos.getContent({
     owner: 'walbuc',
-    repo: 'blog',
+    repo: 'wb-arena',
     path,
     ref,
   })
