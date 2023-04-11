@@ -133,10 +133,11 @@ export async function getAllCacheKeys(limit: number) {
 
 export async function searchCacheKeys(search: string, limit: number) {
   return {
-    sqlite: cacheDb
-      .prepare('SELECT key FROM cache WHERE key LIKE ? LIMIT ?')
-      .all(`%${search}%`, limit)
-      .map(row => row.key),
+    sqlite: (
+      cacheDb
+        .prepare('SELECT key FROM cache WHERE key LIKE ? LIMIT ?')
+        .all(`%${search}%`, limit) as {key: string}[]
+    ).map(row => row.key),
     lru: [...lru.keys()].filter(key => key.includes(search)),
   }
 }
