@@ -71,6 +71,7 @@
     "pm2": "^5.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-is": "^18.2.0",
     "reading-time": "^1.5.0",
     "rehype-document": "^6.1.0",
     "rehype-format": "^4.0.1",
