@@ -63,8 +63,6 @@ COPY --from=build /myapp/package.json /myapp/package.json
 COPY --from=build /myapp/start.sh /myapp/start.sh
 COPY --from=build /myapp/prisma /myapp/prisma
 
-ENTRYPOINT [ "./start.sh" ]
-
 # prepare for litefs
 COPY --from=flyio/litefs:sha-a1fabcd /usr/local/bin/litefs /usr/local/bin/litefs
 ADD other/litefs.yml /etc/litefs.yml
