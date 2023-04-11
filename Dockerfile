@@ -39,17 +39,18 @@ RUN npm run build
 
 # Finally, build the production image with minimal footprint
 FROM base
-
-ENV DATABASE_URL="file:./data.db?connection_limit=1"
-ENV SESSION_SECRET="a3f23608b1f95640d5b78601cc0390eb"
+ENV FLY="true"
+ENV LITEFS_DIR="/litefs"
 ENV DATABASE_FILENAME="sqlite.db"
-ENV LITEFS_DIR="./prisma"
-ENV CACHE_DATABASE_PATH="other/cache.db"
-ENV PORT="8080"
+ENV DATABASE_URL="file:$LITEFS_DIR/$DATABASE_FILENAME"
+ENV INTERNAL_PORT="8080"
+ENV PORT="8081"
 ENV NODE_ENV="production"
-
-# add shortcut for connecting to database CLI
+ENV CACHE_DATABASE_FILENAME="cache.db"
+ENV CACHE_DATABASE_PATH="/$LITEFS_DIR/$CACHE_DATABASE_FILENAME"
+# Make SQLite CLI accessible
 RUN echo "#!/bin/sh\nset -x\nsqlite3 \$DATABASE_URL" > /usr/local/bin/database-cli && chmod +x /usr/local/bin/database-cli
+RUN echo "#!/bin/sh\nset -x\nsqlite3 \$CACHE_DATABASE_PATH" > /usr/local/bin/cache-database-cli && chmod +x /usr/local/bin/cache-database-cli
 
 WORKDIR /myapp
 
@@ -63,3 +64,11 @@ COPY --from=build /myapp/start.sh /myapp/start.sh
 COPY --from=build /myapp/prisma /myapp/prisma
 
 ENTRYPOINT [ "./start.sh" ]
+
+# prepare for litefs
+COPY --from=flyio/litefs:sha-a1fabcd /usr/local/bin/litefs /usr/local/bin/litefs
+ADD other/litefs.yml /etc/litefs.yml
+RUN mkdir -p /data ${LITEFS_DIR}
+
+CMD ["litefs", "mount", "--", "node", "./other/start.js"]
+
