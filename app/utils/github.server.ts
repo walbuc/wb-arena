@@ -142,7 +142,7 @@ async function downloadFile(path: string) {
     path,
     ref,
   })
-
+  console.log('downloadFile ', path)
   if ('content' in data && 'encoding' in data) {
     const encoding = data.encoding as Parameters<typeof Buffer.from>['1']
     return Buffer.from(data.content, encoding).toString()
