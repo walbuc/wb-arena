@@ -22,7 +22,8 @@
     "pretest:e2e:run": "npm run build",
     "test:e2e:run": "cross-env PORT=8811 start-server-and-test start:mocks http://localhost:8811 \"npx cypress run\"",
     "typecheck": "tsc && tsc -p cypress",
-    "validate": "run-p \"test -- --run\" lint typecheck test:e2e:run"
+    "validate": "run-p \"test -- --run\" lint typecheck test:e2e:run",
+    "postinstall": "patch-package --patch-dir other/patches"
   },
   "eslintIgnore": [
     "/node_modules",
@@ -66,6 +67,7 @@
     "morgan": "^1.10.0",
     "on-finished": "^2.4.1",
     "p-queue": "^7.3.4",
+    "patch-package": "^6.5.1",
     "pm2": "^5.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

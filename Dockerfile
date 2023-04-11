@@ -40,7 +40,11 @@ RUN npm run build
 # Finally, build the production image with minimal footprint
 FROM base
 
-ENV DATABASE_URL=file:/data/sqlite.db
+ENV DATABASE_URL="file:./data.db?connection_limit=1"
+ENV SESSION_SECRET="a3f23608b1f95640d5b78601cc0390eb"
+ENV DATABASE_FILENAME="sqlite.db"
+ENV LITEFS_DIR="./prisma"
+ENV CACHE_DATABASE_PATH="other/cache.db"
 ENV PORT="8080"
 ENV NODE_ENV="production"
 
