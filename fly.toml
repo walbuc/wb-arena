@@ -48,4 +48,4 @@ processes = [ ]
   
 [mounts]
   source = "litefs"
-  destination = "/var/lib/litefs"
+  destination = "/data"
