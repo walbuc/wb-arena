@@ -32,6 +32,9 @@ RUN npm prune --production
 # Build the app
 FROM base as build
 
+ARG COMMIT_SHA
+ENV COMMIT_SHA=$COMMIT_SHA
+
 WORKDIR /myapp
 
 COPY --from=deps /myapp/node_modules /myapp/node_modules
@@ -48,7 +51,8 @@ ENV FLY="true"
 ENV LITEFS_DIR="/litefs"
 ENV DATABASE_FILENAME="sqlite.db"
 ENV DATABASE_URL="file:$LITEFS_DIR/$DATABASE_FILENAME"
-ENV PORT="8080"
+ENV INTERNAL_PORT="8080"
+ENV PORT="8081"
 ENV NODE_ENV="production"
 ENV CACHE_DATABASE_FILENAME="cache.db"
 ENV CACHE_DATABASE_PATH="/$LITEFS_DIR/$CACHE_DATABASE_FILENAME"
