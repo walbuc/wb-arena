@@ -16,6 +16,7 @@ model User {
 
   password Password?
   notes    Note[]
+  role     String    @default("MEMBER")
 }
 
 model Password {
