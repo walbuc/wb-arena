@@ -79,7 +79,7 @@ export default function BlogMdx() {
           </H6>
         </div>
         <div className="mb-10 mt-12  lg:mb-12">
-          <BackLink to="/blog">Back</BackLink>
+          <BackLink to="/">Back</BackLink>
         </div>
       </Grid>
       <Grid>

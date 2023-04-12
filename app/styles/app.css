@@ -27,6 +27,9 @@
 
 
 @layer components {
+  
+  
+  
   .card {
     --yellow: #ffc600;
     --pink: #ff3f8e;
@@ -45,6 +48,7 @@
     display: grid;
     margin-bottom: var(--gap);
     cursor: pointer;
+    
   }
 
   .card a {
@@ -58,7 +62,8 @@
     font-weight: 900;
     font-size: 15px;
   }
-  .card a:before {
+
+  .card a::before {
     content: "";
     display: block;
     width: calc(100% + 2px);
@@ -70,7 +75,83 @@
     border-radius: var(--radius);
     background: linear-gradient(45deg, var(--color2), var(--color1));
   }
-  .card h2:after {
+/* 
+  @keyframes rotateBG {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  } */
+
+  .tail {
+    transition: all var(--duration);
+    width: var(--inline);
+    height: var(--block);
+    background: var(--color1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+  }
+
+  .tail.top {
+    background-image: linear-gradient(to right, var(--color1), var(--color2));
+    height: var(--inline);
+    width: var(--block);
+    transition-delay: calc(var(--duration) * 2);
+  }
+
+  .tail.right {
+    right: 0;
+    left: unset;
+    background: var(--color2);
+    transition-delay: var(--duration);
+  }
+
+  .tail.bottom {
+    height: var(--inline);
+    width: var(--block);
+    bottom: 0;
+    right: 0;
+    left: unset;
+    top: unset;
+    background-image: linear-gradient(to right, var(--color1), var(--color2));
+    transition-delay: 0ms;
+  }
+
+  .tail.left {
+    bottom: 0;
+    top: unset;
+    transition-delay: calc(var(--duration) * 3);
+  }
+
+  .snake:where(.start, :hover) .tail.top {
+    transition-delay: var(--duration);
+  }
+  .snake:where(.start, :hover) .tail.right {
+    transition-delay: calc(var(--duration) * 2);
+  }
+  .snake:where(.start, :hover) .tail.bottom {
+    transition-delay: calc(var(--duration) * 3);
+  }
+  .snake:where(.start, :hover) .tail.left {
+    transition-delay: 0ms;
+  }
+
+  .snake {
+    position: relative;
+  }
+
+  .snake.start .tail {
+    --block: 0;
+  }
+  .snake:hover .tail {
+    --block: 100%;
+  }
+ 
+  .card h3:after {
     content: "";
     display: block;
     width: 100%;
@@ -160,8 +241,7 @@
   }
 }
 
-.light,
-.dark .text-inverse {
+.light, .dark .text-inverse {
   --color-team-unknown: var(--color-black);
   --bg-primary: var(--color-white);
   --bg-secondary: var(--color-gray-100);

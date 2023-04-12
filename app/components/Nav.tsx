@@ -27,7 +27,7 @@ import {MoonIcon, SunIcon} from './icons'
 // import {TeamCircle} from './team-circle'
 
 const LINKS = [
-  {name: 'Blog', to: '/blog'},
+  {name: 'Blog', to: '/'},
   {name: 'Snippets', to: '/snippets'},
   {name: 'Github', to: '/github'},
   {name: 'About', to: '/about'},
@@ -318,7 +318,6 @@ function ProfileButton({
 function Navbar() {
   //   const {requestInfo, userInfo} = useRootData()
   //   const avatar = userInfo ? userInfo.avatar : 'waht'
-
   return (
     <div className="px-5vw py-9 lg:py-12">
       <nav className="text-primary mx-auto flex max-w-8xl items-center justify-between">
