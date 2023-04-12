@@ -70,6 +70,7 @@ COPY --from=build /myapp/node_modules/.prisma /myapp/node_modules/.prisma
 COPY --from=build /myapp/build /myapp/build
 COPY --from=build /myapp/public /myapp/public
 COPY --from=build /myapp/package.json /myapp/package.json
+COPY --from=build /app/other/runfile.js /app/other/runfile.js
 COPY --from=build /myapp/other/start.js /myapp/other/start.js
 COPY --from=build /myapp/prisma /myapp/prisma
 
