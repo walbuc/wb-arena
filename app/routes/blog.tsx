@@ -6,15 +6,15 @@ import {useUser} from '~/utils'
 import {getNoteListItems} from '~/models/note.server'
 import {Navbar} from '~/components/Nav'
 
-export async function loader({request}: LoaderArgs) {
-  const userId = await requireUserId(request)
-  const noteListItems = await getNoteListItems({userId})
-  return json({noteListItems})
-}
+// export async function loader({request}: LoaderArgs) {
+//   //const userId = await requireUserId(request)
+//   //const noteListItems = await getNoteListItems({userId})
+//   //return json({noteListItems})
+// }
 
 export default function BlogPage(args: LoaderArgs) {
-  const data = useLoaderData<typeof loader>()
-  const user = useUser()
+  // const data = useLoaderData<typeof loader>()
+  // const user = useUser()
 
   return (
     <div className="flex h-full min-h-screen flex-col">
