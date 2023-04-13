@@ -15,28 +15,21 @@ import {
   useAnimation,
   useReducedMotion,
 } from 'framer-motion'
-import * as React from 'react'
 import {useEffect} from 'react'
-// import {kodyProfiles} from '~/images'
-// import type {OptionalTeam} from '~/utils/misc'
-
 import {Theme, Themed, useTheme} from '~/utils/theme-provider'
-// /import {useOptionalUser, useRootData} from '~/utils/use-root-data'
-import {useElementState} from './hooks/use-element-state'
 import {MoonIcon, SunIcon} from './icons'
-// import {TeamCircle} from './team-circle'
 
-const LINKS = [
+const LINKS: {name: string; to: string; type?: string}[] = [
   {name: 'Blog', to: '/'},
-  {name: 'Snippets', to: '/snippets'},
-  {name: 'Github', to: '/github'},
-  {name: 'About', to: '/about'},
+  {name: 'About', to: 'https://github.com/walbuc', type: 'anchor'},
+  {name: 'GitHub', to: 'https://github.com/walbuc/wb-arena', type: 'anchor'},
 ]
 
 const MOBILE_LINKS = [{name: 'Home', to: '/'}, ...LINKS]
 
 function NavLink({
   to,
+  type,
   ...rest
 }: Omit<Parameters<typeof Link>['0'], 'to'> & {to: string}) {
   const location = useLocation()
@@ -45,18 +38,32 @@ function NavLink({
 
   return (
     <li className="px-5 py-2">
-      <Link
-        prefetch="intent"
-        className={clsx(
-          'underlined block whitespace-nowrap text-lg font-medium hover:text-team-current focus:text-team-current focus:outline-none',
-          {
-            'active text-team-current': isSelected,
-            'text-secondary': !isSelected,
-          },
-        )}
-        to={to}
-        {...rest}
-      />
+      {type === 'anchor' ? (
+        <a
+          className={clsx(
+            'underlined block whitespace-nowrap text-lg font-medium hover:text-purple-300 focus:text-purple-300 focus:outline-none',
+            {
+              'active text-team-current': isSelected,
+              'text-secondary': !isSelected,
+            },
+          )}
+          href={to}
+          {...rest}
+        />
+      ) : (
+        <Link
+          prefetch="intent"
+          className={clsx(
+            'underlined block whitespace-nowrap text-lg font-medium hover:text-purple-300 focus:text-purple-300 focus:outline-none',
+            {
+              'active text-team-current': isSelected,
+              'text-secondary': !isSelected,
+            },
+          )}
+          to={to}
+          {...rest}
+        />
+      )}
     </li>
   )
 }
@@ -152,7 +159,7 @@ function MobileMenuList() {
             <MenuItems className="border-none bg-transparent p-0">
               {MOBILE_LINKS.map(link => (
                 <MenuLink
-                  className="hover:bg-secondary focus:bg-secondary text-primary border-b border-gray-200 px-5vw py-9 hover:text-team-current dark:border-gray-600"
+                  className="hover:bg-secondary focus:bg-secondary text-primary border-b border-gray-200 px-5vw py-9 hover:text-purple-700 dark:border-gray-600"
                   key={link.to}
                   as={Link}
                   to={link.to}
@@ -247,74 +254,6 @@ function MobileMenu() {
   )
 }
 
-// Timing durations used to control the speed of the team ring in the profile button.
-// Time is seconds per full rotation
-const durations = {
-  initial: 40,
-  hover: 3,
-  focus: 3,
-  active: 0.25,
-}
-
-function ProfileButton({
-  imageUrl,
-  imageAlt,
-  magicLinkVerified,
-}: {
-  imageUrl: string
-  imageAlt: string
-  magicLinkVerified?: boolean | undefined
-}) {
-  //const user = useOptionalUser()
-  const controls = useAnimation()
-  const [ref, state] = useElementState()
-  const shouldReduceMotion = useReducedMotion()
-
-  React.useEffect(() => {
-    void controls.start((_, {rotate = 0}) => {
-      const target =
-        typeof rotate === 'number'
-          ? state === 'initial'
-            ? rotate - 360
-            : rotate + 360
-          : 360
-
-      return shouldReduceMotion
-        ? {}
-        : {
-            rotate: [rotate, target],
-            transition: {
-              duration: durations[state],
-              repeat: Infinity,
-              ease: 'linear',
-            },
-          }
-    })
-  }, [state, controls, shouldReduceMotion])
-
-  return (
-    <Link
-      prefetch="intent"
-      to="/"
-      //   to={user ? '/me' : magicLinkVerified ? '/signup' : '/login'}
-      //   aria-label={
-      //     user ? 'My Account' : magicLinkVerified ? 'Finish signing up' : 'Login'
-      //   }
-      className={clsx(
-        'ml-4 inline-flex h-14 w-14 items-center justify-center rounded-full focus:outline-none',
-      )}
-      ref={ref}
-    >
-      <img
-        className={clsx('inline w-10 select-none rounded-full')}
-        src={imageUrl}
-        alt={imageAlt}
-        crossOrigin="anonymous"
-      />
-    </Link>
-  )
-}
-
 function Navbar() {
   //   const {requestInfo, userInfo} = useRootData()
   //   const avatar = userInfo ? userInfo.avatar : 'waht'
@@ -333,7 +272,7 @@ function Navbar() {
 
         <ul className="hidden lg:flex">
           {LINKS.map(link => (
-            <NavLink key={link.to} to={link.to}>
+            <NavLink key={link.to} to={link.to} type={link.type}>
               {link.name}
             </NavLink>
           ))}
