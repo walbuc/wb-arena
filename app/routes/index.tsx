@@ -64,12 +64,12 @@ export default function BlogIndexPage() {
     <Wrapper>
       <Grid className="sm:gap-6 gap-y-6 md:gap-x-12">
         {posts.map((p, i) => (
-          <div className="col-span-full grid  md:col-span-4" key={p.slug}>
+          <div className="col-span-full grid md:col-span-4" key={p.slug}>
             <div
               className="card snake"
               style={green.includes(i) ? greenStyles : void 0}
             >
-              <div className="flex flex-col justify-between rounded-3xl p-6">
+              <div className="flex flex-col justify-between p-6">
                 <div>
                   <H3>{p.frontmatter.title}</H3>
                   <Paragraph className="my-5">

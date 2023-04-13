@@ -28,19 +28,17 @@
 
 @layer components {
   
-  
-  
   .card {
     --yellow: #ffc600;
     --pink: #ff3f8e;
     --color1: var(--yellow);
     --color2: var(--pink);
-    --inline: 16px;
+    --inline: 5px;
     --block: 0;
     --duration: 300ms;
     --padding: 4px;
-    --border: 1px;
-    --radius: 24px;
+    --border: 3px;
+    --radius: 0.5rem;
     box-shadow: inset 0 0 0 var(--border) grey;
     padding: var(--padding);
     border-radius: calc(var(--radius) + var(--padding));
