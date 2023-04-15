@@ -1,0 +1,70 @@
+---
+title: Buffers in Node.js
+---
+
+### Background
+
+Mechanism for reading or manipulating streams of binary data. The Buffer class I
+was introduced as part of the Node.js API to make it possible to manipulate or
+interact with streams of binary data.
+
+But numbers are not the only data type we work with. We also have strings,
+images, and even videos. Computers know how to represent all types of data in
+binaries. Let’s take strings, for example. How will a computer represent the
+string “L” in binaries? To store any character in binaries, Computers will first
+convert that character to a number, then convert that number to its binary
+representation. So for the string “L”, computers will first convert L to a
+number that represents L. Let’s see how.
+
+#### Character Sets
+
+Character Sets are already defined rules of what exact number represents each
+character. We have different definitions of these rules.The very popular ones
+include Unicode and ASCII. JavaScript plays really well with Unicode Character
+Sets. In fact, it is the Unicode in your browser that states that 76 should
+represent L.
+
+#### Character Encoding
+
+Just as there are rules that define what number should represent a character,
+there are also rules that define how that number should be represented in
+binaries. Specifically, how many bits to use to represent the number. This is
+called Character Encoding.
+
+One of the definitions for Character Encoding is the UTF-8. UTF-8 states that
+characters should be encoded in bytes. A byte is a set of eight bits — eight 1s
+and 0s. So eight 1s and 0s should be used to represent the Code Point of any
+character in binary.
+
+To understand this, as we mentioned earlier, the binary representation of the
+number 12 is 1100. So when UTF-8 state that 12 should be in eight bits, UTF-8 is
+saying that a computer needs to add more bits to the left side of the actual
+base-2 representation of the number 12 to make it a byte. So 12 should be stored
+as 00001100. Makes sense?
+
+Therefore, 76 should be stored as 01001100.
+
+computers also have specified rules on how images and videos should be converted
+or encoded and stored in binaries. The point here is, computers stores all data
+types in binaries, and this is known as binary data.
+
+But there is a minimum and a maximum amount of data a process could take over
+time. So if the rate the data arrives is faster than the rate the process
+consumes the data, the excess data need to wait somewhere for its turn to be
+processed.
+
+On the other hand, if the process is consuming the data faster than it arrives,
+the few data that arrive earlier need to wait for a certain amount of data to
+arrive before being sent out for processing.
+
+That “waiting area” is the buffer! It is a small physical location in your
+computer, usually in the RAM, where data are temporally gathered, wait, and are
+eventually sent out for processing during streaming.
+
+Node.js can’t control the speed or time of data arrival, the speed of the
+stream. It only can decide when it’s time to send out the data. If it’s not yet
+time, Node.js will put them in the buffer — the “waiting area” — a small
+location in the RAM, until it’s time to send them out for processing.
+
+Character encoding
+https://www.w3.org/International/questions/qa-what-is-encoding
