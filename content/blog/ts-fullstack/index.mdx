@@ -10,3 +10,33 @@ requests.
 
 If there is a change in type in the backend and I use that in the frontend, I
 want to catch that error with ts static analysis and be type safe.
+
+#### Tips
+
+In ts if you pre some variable with \_ (underscore) Ts wont warn you if it is
+not used.
+
+In Ts everything is required and you need to indicate if some property if
+optional. In GraphQL everything is optional and you need to indicate if
+something is requried.
+
+#### Typing Resolvers
+
+Generate Ts code based on a GraphQl Schema. In Server folder `yarn codegen`
+
+In client folder same comand after creatin gql queries mutations `yarn codegen`
+
+You can configure gql-cg to instrospect types in the backend and frontend.
+[graphql code generator](https://the-guild.dev/graphql/codegen)
+
+in the frontend code it will return typed functions (use hooks) that can be
+called.
+
+Guardrails are up. One set of assumptions & constraints, UI, Backend and DB are
+operating under the same set of assumptions defined in one file.
+
+#### N+1 Problem:
+
+Excessive quering.
+
+#### Transforms: Mapping between DB schema to GraphQL schema.

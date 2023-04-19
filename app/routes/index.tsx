@@ -13,7 +13,7 @@ export async function loader({request}: LoaderArgs) {
   const timings = {}
 
   const [posts] = await Promise.all([
-    getBlogMdxListItems({request, forceFresh: false}).then(allPosts =>
+    getBlogMdxListItems({request, forceFresh: true}).then(allPosts =>
       allPosts.filter(p => !p.frontmatter.draft),
     ),
   ])
