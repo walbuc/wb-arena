@@ -341,8 +341,8 @@ async function getBlogMdxListItems(options: CachifiedOptions) {
     cache,
     request,
     timings,
-    ttl: 1000,
-    staleWhileRevalidate: 10000,
+    ttl: defaultTTL,
+    staleWhileRevalidate: defaultSWR,
     forceFresh,
     key,
     getFreshValue: async () => {
