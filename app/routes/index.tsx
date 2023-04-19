@@ -10,11 +10,10 @@ import type {PropsWithChildren} from 'react'
 import {useSnakeEffect} from '~/utils/hooks'
 
 export async function loader({request}: LoaderArgs) {
-  console.log('me llama')
   const timings = {}
 
   const [posts] = await Promise.all([
-    getBlogMdxListItems({request, forceFresh: true}).then(allPosts =>
+    getBlogMdxListItems({request}).then(allPosts =>
       allPosts.filter(p => !p.frontmatter.draft),
     ),
   ])
