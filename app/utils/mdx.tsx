@@ -335,18 +335,20 @@ async function getMdxPagesInDirectory(
 }
 
 async function getBlogMdxListItems(options: CachifiedOptions) {
+  console.log('llama getBlogMdxListItems')
   const {request, forceFresh, ttl = defaultTTL, timings} = options
   const key = 'blog:mdx-list-items'
   return cachified({
     cache,
     request,
     timings,
-    ttl,
-    staleWhileRevalidate: defaultSWR,
+    ttl: 1,
+    staleWhileRevalidate: 1,
     forceFresh,
     key,
     getFreshValue: async () => {
       console.log('getting fresh value')
+      console.log('AAAA')
       let pages = await getMdxPagesInDirectory('blog', options).then(allPosts =>
         allPosts.filter(p => !p.frontmatter.draft && !p.frontmatter.unlisted),
       )
