@@ -3,7 +3,7 @@ import * as React from 'react'
 function useSnakeEffect() {
   React.useEffect(() => {
     const cards = document.querySelectorAll<HTMLElement>('.card')
-    console.log(cards)
+
     // Add the tails to each card
     cards.forEach(card => {
       const tuple = ['top', 'right', 'bottom', 'left'] as const
@@ -26,7 +26,6 @@ function useSnakeEffect() {
     })
 
     setInterval(() => {
-      console.log('me llama')
       cards.forEach(card => {
         if (!card.style.getPropertyValue('--color1')) {
           card.style.setProperty(

@@ -346,6 +346,7 @@ async function getBlogMdxListItems(options: CachifiedOptions) {
     forceFresh,
     key,
     getFreshValue: async () => {
+      console.log('getting fresh value')
       let pages = await getMdxPagesInDirectory('blog', options).then(allPosts =>
         allPosts.filter(p => !p.frontmatter.draft && !p.frontmatter.unlisted),
       )
