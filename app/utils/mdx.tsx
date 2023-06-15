@@ -336,12 +336,12 @@ async function getMdxPagesInDirectory(
 
 async function getBlogMdxListItems(options: CachifiedOptions) {
   const {request, forceFresh, ttl = defaultTTL, timings} = options
-  const key = 'blog:mdx-list-itemsss'
+  const key = 'blog:mdx-list-items'
   return cachified({
     cache,
     request,
     timings,
-    ttl: defaultTTL,
+    ttl,
     staleWhileRevalidate: defaultSWR,
     forceFresh,
     key,
