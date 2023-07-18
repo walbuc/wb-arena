@@ -51,7 +51,7 @@ export default function BlogMdx() {
   return (
     <div>
       <Grid key={params.slug} className="m-0 mb-6">
-        <div className="col-span-full lg:col-span-8 lg:col-start-3">
+        <div className="col-span-full lg:col-span-7 lg:col-start-3">
           {isDraft ? (
             <div className="prose prose-light mb-6 max-w-full dark:prose-dark">
               {React.createElement(
@@ -119,7 +119,7 @@ export default function BlogMdx() {
         ) : null}
       </Grid>
       <Grid>
-        <div className="prose prose-light col-span-full mb-24 break-words dark:prose-dark lg:col-span-7  lg:col-start-3">
+        <div className="prose prose-light col-span-full mb-24 break-words dark:prose-dark lg:col-span-8  lg:col-start-3">
           <Component />
         </div>
       </Grid>
