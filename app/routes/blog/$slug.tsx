@@ -45,8 +45,8 @@ export default function BlogMdx() {
   const {code, frontmatter} = data.page
   const params = useParams()
   const Component = useMdxComponent(code)
-  const isDraft = false
-  const isArchived = false
+  const isDraft = frontmatter.draft
+  const isArchived = frontmatter.archived
 
   return (
     <div>

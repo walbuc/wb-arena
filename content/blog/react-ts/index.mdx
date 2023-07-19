@@ -64,7 +64,18 @@ When returning json data from api.
 
 ```ts
 type HexColor = `#${string}`
-const isHexColor = (s: string): s is HexColor => s.startsWith('x')
+const isHexColor = (s: string): s is HexColor => {
+  return s.startsWith('#')
+}
+```
+
+This is a super useful technique
+
+```ts
+const isSomeDataType = (x: unkwown): x is MyDataType => {
+  // run here a bunch of checks and if return true
+  // will be cast to MyDataType
+}
 ```
 
 ### Dinamically derive the type from the value
@@ -73,7 +84,7 @@ When you have a value with type inference you can derive the type with type of
 or copy paste what typescript inferenced. You can pull types out of values.
 
 ```ts
-type ItemsState = typeof value value
+type ItemsState = typeof value
 ```
 
 ```ts
@@ -92,7 +103,6 @@ Choose your own adventure with Ts
 ```ts
 // Utility
 // Omit<Partial<T>, key>
-
 // Custom type
 type Item = {
   id: string
@@ -203,6 +213,24 @@ type LabelInputProps = ComponentsPropsWithoutRef<'input'> & {
 }
 ```
 
-More Advanced Patterns:
+### More Advanced Patterns:
 
 [Typescript Challenges](https://ghaiklor.github.io/type-challenges-solutions/en/)
+
+### Utilities:
+
+This is what react is doing under the hood for getting the type of the state
+value in the reducer function.
+
+```tsx
+type ReducerState = ReturnType<typeof reducerfn>
+```
+
+Brand new features from Ts that are super useful for type safety:
+
+```ts
+type HexColor = `#${string}`
+type RGBColor = `rgb(${number}, ${number},${number})`
+```
+
+[The context API is not a state management tool](https://blog.isquaredsoftware.com/2021/01/context-redux-differences/)
