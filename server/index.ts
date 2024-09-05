@@ -14,7 +14,7 @@ const BUILD_DIR = path.join(process.cwd(), 'build')
 const app = express()
 
 const here = (...a: Array<string>) => path.join(__dirname, ...a)
-const primaryHost = 'arenanpm.com'
+const primaryHost = 'arena-wb.com'
 
 app.use(compression())
 
