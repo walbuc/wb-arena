@@ -4,6 +4,7 @@ describe('blog tests', () => {
     cy.visit('/')
     cy.assertHome('/')
   })
+
   afterEach(() => {
     cy.cleanupUser()
   })
