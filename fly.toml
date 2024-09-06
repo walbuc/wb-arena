@@ -10,7 +10,7 @@ primary_region = "gig"
   enable_consul = true
 
 [[mounts]]
-  source = "vol_4mn0wgjqq9gp183r"
+  source = "data_machines"
   destination = "/data"
   processes = ["app"]
 
