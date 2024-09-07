@@ -142,5 +142,8 @@
   "volta": {
     "node": "18.20.4",
     "npm": "8.19.4"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
