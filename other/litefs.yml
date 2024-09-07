@@ -23,8 +23,8 @@ data:
   # Path to internal data storage.
   dir: '/data/litefs'
 
-# mount_dir: '/data' # Directory where your SQLite database will be mounted
 data_dir: '/var/lib/litefs'
+mount_dir: '/data' # Directory where your SQLite database will be mounted
 
 proxy:
   # matches the internal_port in fly.toml
