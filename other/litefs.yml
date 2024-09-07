@@ -1,59 +1,103 @@
-# The FUSE section handles settings on the FUSE file system. FUSE
-# provides a layer for intercepting SQLite transactions on the
-# primary node so they can be shipped to replica nodes
-# transparently.
+# FUSE settings for intercepting SQLite transactions on the primary node.
 fuse:
-  # Required. This is the mount directory that applications will
-  # use to access their SQLite databases.
-  dir: '${LITEFS_DIR}'
+  # Required. This is the mount directory for accessing SQLite databases.
+  dir: '${LITEFS_DIR}' # Correct environment variable for directory
 
-  # The debug flag enables debug logging of all FUSE API calls.
-  # This will produce a lot of logging. Not for general use.
+  # Optional: Enables debug logging for FUSE API calls.
   debug: false
 
-# The data section specifies where internal LiteFS data is stored
-# and how long to retain the transaction files.
-#
-# Transaction files are used to ship changes to replica nodes so
-# they should persist long enough for replicas to retrieve them,
-# even in the face of a short network interruption or a redeploy.
-# Under high load, these files can grow large so it's not advised
-# to extend retention too long.
+# LiteFS internal data storage and transaction file settings.
 data:
-  # Path to internal data storage.
-  dir: '/data/litefs'
+  # Directory for internal LiteFS data storage.
+  dir: '/data/litefs' # Correct directory path for LiteFS data storage.
 
-data_dir: '/var/lib/litefs'
-mount_dir: '/data' # Directory where your SQLite database will be mounted
+# Remove these as they no longer apply to the current LiteFS config.
+# data_dir: '/var/lib/litefs'
+# mount_dir: '/data'
 
 proxy:
-  # matches the internal_port in fly.toml
+  # Matches the internal port defined in fly.toml
   addr: ':${INTERNAL_PORT}'
-  # PORT is set in the Dockerfile
+
+  # Target port set in the Dockerfile for accessing the application.
   target: 'localhost:${PORT}'
+
+  # SQLite database file to be proxied.
   db: '${DATABASE_FILENAME}'
+
+  # Optional: Debug flag for proxy logging.
   debug: false
 
-# This flag ensure that LiteFS continues to run if there is an issue on starup.
-# It makes it easy to ssh in and debug any issues you might be having rather
-# than continually restarting on initialization failure.
+# Ensures LiteFS continues running if there are startup issues, for easier debugging.
 exit-on-error: false
 
-# The lease section specifies how the cluster will be managed. We're using the
-# "consul" lease type so that our application can dynamically change the primary.
-#
-# These environment variables will be available in your Fly.io application.
-# You must specify "experiement.enable_consul" for FLY_CONSUL_URL to be available.
-# lease:
-#   type: 'consul'
-#   candidate: ${FLY_REGION == 'gig'}
-#   advertise-url: 'http://${HOSTNAME}.vm.${FLY_APP_NAME}.internal:20202'
-
-#   consul:
-#     url: '${FLY_CONSUL_URL}'
-#     key: 'litefs/${FLY_APP_NAME}'
-
+# Lease configuration for managing the primary node dynamically using Consul.
 lease:
   type: 'consul'
-  url: 'http://consul.internal:8500'
+
+  # Consul server URL for managing leases.
+  url: 'http://consul.internal:8500' # Ensure this URL is correct for your environment.
+
+  # Advertise URL for other nodes in the Fly.io cluster.
   advertise-url: 'http://${FLY_APP_NAME}.internal:20202'
+# Note: Ensure "experiement.enable_consul" is set in your environment for FLY_CONSUL_URL to be available.
+
+# # The FUSE section handles settings on the FUSE file system. FUSE
+# # provides a layer for intercepting SQLite transactions on the
+# # primary node so they can be shipped to replica nodes
+# # transparently.
+# fuse:
+#   # Required. This is the mount directory that applications will
+#   # use to access their SQLite databases.
+#   dir: '${LITEFS_DIR}'
+
+#   # The debug flag enables debug logging of all FUSE API calls.
+#   # This will produce a lot of logging. Not for general use.
+#   debug: false
+
+# # The data section specifies where internal LiteFS data is stored
+# # and how long to retain the transaction files.
+# #
+# # Transaction files are used to ship changes to replica nodes so
+# # they should persist long enough for replicas to retrieve them,
+# # even in the face of a short network interruption or a redeploy.
+# # Under high load, these files can grow large so it's not advised
+# # to extend retention too long.
+# data:
+#   # Path to internal data storage.
+#   dir: '/data/litefs'
+
+# data_dir: '/var/lib/litefs'
+# mount_dir: '/data' # Directory where your SQLite database will be mounted
+
+# proxy:
+#   # matches the internal_port in fly.toml
+#   addr: ':${INTERNAL_PORT}'
+#   # PORT is set in the Dockerfile
+#   target: 'localhost:${PORT}'
+#   db: '${DATABASE_FILENAME}'
+#   debug: false
+
+# # This flag ensure that LiteFS continues to run if there is an issue on starup.
+# # It makes it easy to ssh in and debug any issues you might be having rather
+# # than continually restarting on initialization failure.
+# exit-on-error: false
+
+# # The lease section specifies how the cluster will be managed. We're using the
+# # "consul" lease type so that our application can dynamically change the primary.
+# #
+# # These environment variables will be available in your Fly.io application.
+# # You must specify "experiement.enable_consul" for FLY_CONSUL_URL to be available.
+# # lease:
+# #   type: 'consul'
+# #   candidate: ${FLY_REGION == 'gig'}
+# #   advertise-url: 'http://${HOSTNAME}.vm.${FLY_APP_NAME}.internal:20202'
+
+# #   consul:
+# #     url: '${FLY_CONSUL_URL}'
+# #     key: 'litefs/${FLY_APP_NAME}'
+
+# lease:
+#   type: 'consul'
+#   url: 'http://consul.internal:8500'
+#   advertise-url: 'http://${FLY_APP_NAME}.internal:20202'
