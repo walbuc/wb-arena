@@ -23,8 +23,8 @@ data:
   # Path to internal data storage.
   dir: '/data/litefs'
 
-mount_dir: '/data' # Directory where your SQLite database will be mounted
-# data_dir: "/var/lib/litefs"
+# mount_dir: '/data' # Directory where your SQLite database will be mounted
+data_dir: '/var/lib/litefs'
 
 proxy:
   # matches the internal_port in fly.toml
@@ -55,5 +55,5 @@ exit-on-error: false
 
 lease:
   type: 'consul'
-  candidate: ${FLY_REGION == 'gig'}
+  url: 'http://consul.internal:8500'
   advertise-url: 'http://${FLY_APP_NAME}.internal:20202'
