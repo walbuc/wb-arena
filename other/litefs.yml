@@ -23,6 +23,9 @@ data:
   # Path to internal data storage.
   dir: '/data/litefs'
 
+mount_dir: '/data' # Directory where your SQLite database will be mounted
+# data_dir: "/var/lib/litefs"
+
 proxy:
   # matches the internal_port in fly.toml
   addr: ':${INTERNAL_PORT}'
@@ -41,11 +44,16 @@ exit-on-error: false
 #
 # These environment variables will be available in your Fly.io application.
 # You must specify "experiement.enable_consul" for FLY_CONSUL_URL to be available.
+# lease:
+#   type: 'consul'
+#   candidate: ${FLY_REGION == 'gig'}
+#   advertise-url: 'http://${HOSTNAME}.vm.${FLY_APP_NAME}.internal:20202'
+
+#   consul:
+#     url: '${FLY_CONSUL_URL}'
+#     key: 'litefs/${FLY_APP_NAME}'
+
 lease:
   type: 'consul'
   candidate: ${FLY_REGION == 'gig'}
-  advertise-url: 'http://${HOSTNAME}.vm.${FLY_APP_NAME}.internal:20202'
-
-  consul:
-    url: '${FLY_CONSUL_URL}'
-    key: 'litefs/${FLY_APP_NAME}'
+  advertise-url: 'http://${FLY_APP_NAME}.internal:20202'
