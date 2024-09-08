@@ -49,10 +49,9 @@ primary_region = "gig"
   url_prefix = "/favicons"
 
 
-
 [[services]]
   protocol = "tcp"
-  internal_port = 3000
+  internal_port = 8080
 
   [[services.ports]]
     port = 80
