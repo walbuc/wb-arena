@@ -79,5 +79,7 @@ COPY --from=flyio/litefs:0.5.11 /usr/local/bin/litefs /usr/local/bin/litefs
 ADD other/litefs.yml /etc/litefs.yml
 RUN mkdir -p /data ${LITEFS_DIR}
 
+EXPOSE 8080
+
 CMD ["litefs", "mount", "--", "node", "./other/start.js"]
 
