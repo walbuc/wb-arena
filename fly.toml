@@ -9,8 +9,6 @@ kill_signal = "SIGINT"
 kill_timeout = "5s"
 swap_size_mb = 512
 
-app = "wb-arena"
-
 [env]
 PORT = "8080"
 
