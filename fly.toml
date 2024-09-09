@@ -1,23 +1,13 @@
-# fly.toml file generated for wb-arena on 2024-09-05T17:45:23-03:00
+# fly.toml app configuration file generated for kcd on 2023-06-30T11:21:22-06:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
 app = "wb-arena"
-kill_signal = "SIGINT"
-kill_timeout = 5
 primary_region = "gig"
-
-[http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = 'stop'
-  auto_start_machines = true
-  min_machines_running = 0
-  processes = ['app']
-
-[[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
-  cpus = 1
-
+kill_signal = "SIGINT"
+kill_timeout = "5s"
+swap_size_mb = 512
 
 [experimental]
   auto_rollback = true
@@ -48,7 +38,6 @@ primary_region = "gig"
   guest_path = "/app/build/client/favicons"
   url_prefix = "/favicons"
 
-
 [[services]]
   protocol = "tcp"
   internal_port = 8080
@@ -61,16 +50,29 @@ primary_region = "gig"
   [[services.ports]]
     port = 443
     handlers = ["tls", "http"]
-
   [services.concurrency]
     type = "requests"
     hard_limit = 200
     soft_limit = 150
 
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "10s"
+    restart_limit = 6
+
   [[services.http_checks]]
     interval = "10s"
     timeout = "5s"
     grace_period = "1m0s"
+    restart_limit = 0
     method = "get"
     path = "/healthcheck"
     protocol = "http"
+
+  [[services.http_checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/litefs/health"
